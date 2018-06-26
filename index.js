@@ -4,8 +4,8 @@ var express = require('express');
 
 var app = express();
 
-var productCtrl = require('./controllers/product.ctrl');
-var defaultCtrl = require('./controllers/default.ctrl');
+var defaultRouter = require('./routes/default.router');
+var productRouter = require('./routes/product.router');
 
 function cb() {
   console.log("Server is running on port 3000");
@@ -13,7 +13,9 @@ function cb() {
 
 app.listen(3000, cb);
 
-app.get('/', defaultCtrl.get);
-app.get('/health', defaultCtrl.health);
+// app.get('/', defaultCtrl.get);
+// app.get('/health', defaultCtrl.health);
 
-app.get('/products', productCtrl.get);
+app.use('/', defaultRouter);
+app.use('/', productRouter);
+// app.get('/products', productCtrl.get);
