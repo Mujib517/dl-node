@@ -1,4 +1,5 @@
 var express = require('express');
+var bodyParser = require('body-parser');
 //ES6 module pattern
 //CommonJS
 
@@ -13,5 +14,7 @@ function cb() {
 
 app.listen(3000, cb);
 
+app.use(bodyParser.json());
+
 app.use('/', defaultRouter);
-app.use('/', productRouter);
+app.use('/api/products', productRouter);

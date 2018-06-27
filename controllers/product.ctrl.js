@@ -32,7 +32,29 @@ var productCtrl = {
     }
 
 
+  },
+
+  save: function (req, res) {
+
+    products.push(req.body);
+
+    res.status(201); //Created
+    res.send(req.body);
+  },
+
+  delete: function (req, res) {
+    var id = req.params.id;
+
+    for (var i = 0; i < products.length; i++) {
+      if (products[i].id == id) {
+        products.splice(i, 1);
+      }
+    }
+
+    res.status(204);  //No Content
+    res.send();
   }
+
 };
 
 
