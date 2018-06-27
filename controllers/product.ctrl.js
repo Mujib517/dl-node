@@ -1,22 +1,22 @@
-var products = [{ id: 1, brand: "Nokia", model: "X6", price: 250, inStock: true },
+const products = [{ id: 1, brand: "Nokia", model: "X6", price: 250, inStock: true },
 { id: 2, brand: "Samsung", model: "Galxy S8", price: 250, inStock: true },
 { id: 3, brand: "Samsung", model: "Galaxy S9", price: 750, inStock: false }];
 
 
 
-var productCtrl = {
+const productCtrl = {
 
-  get: function (req, res) {
+  get: (req, res) => {
     res.status(200);
     res.json(products);
   },
 
-  getById: function (req, res) {
+  getById: (req, res) => {
 
-    var id = +req.params.id;
-    var product;
+    let id = +req.params.id;
+    let product;
 
-    for (var i = 0; i < products.length; i++) {
+    for (let i = 0; i < products.length; i++) {
       if (products[i].id === id) {
         product = products[i];
       }
@@ -34,7 +34,7 @@ var productCtrl = {
 
   },
 
-  save: function (req, res) {
+  save: (req, res) => {
 
     products.push(req.body);
 
@@ -42,10 +42,10 @@ var productCtrl = {
     res.send(req.body);
   },
 
-  delete: function (req, res) {
-    var id = +req.params.id;
+  delete: (req, res) => {
+    let id = +req.params.id;
 
-    for (var i = 0; i < products.length; i++) {
+    for (let i = 0; i < products.length; i++) {
       if (products[i].id === id) {
         products.splice(i, 1);
       }
@@ -55,11 +55,11 @@ var productCtrl = {
     res.send();
   },
 
-  update: function (req, res) {
-    var product = req.body;
-    var id = +req.params.id;
+  update: (req, res) => {
+    let product = req.body;
+    let id = +req.params.id;
 
-    for (var i = 0; i < products.length; i++) {
+    for (let i = 0; i < products.length; i++) {
       if (products[i].id === id) {
         products[i].brand = product.brand;
         products[i].model = product.model;
