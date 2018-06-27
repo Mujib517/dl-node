@@ -13,9 +13,5 @@ function cb() {
 
 app.listen(3000, cb);
 
-// app.get('/', defaultCtrl.get);
-// app.get('/health', defaultCtrl.health);
-
 app.use('/', defaultRouter);
 app.use('/', productRouter);
-// app.get('/products', productCtrl.get);
