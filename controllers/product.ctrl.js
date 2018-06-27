@@ -16,8 +16,6 @@ var productCtrl = {
     var id = +req.params.id;
     var product;
 
-    console.log(req.params);
-
     for (var i = 0; i < products.length; i++) {
       if (products[i].id === id) {
         product = products[i];
@@ -54,6 +52,23 @@ var productCtrl = {
     }
 
     res.status(204);  //No Content
+    res.send();
+  },
+
+  update: function (req, res) {
+    var product = req.body;
+    var id = +req.params.id;
+
+    for (var i = 0; i < products.length; i++) {
+      if (products[i].id === id) {
+        products[i].brand = product.brand;
+        products[i].model = product.model;
+        products[i].price = product.price;
+        products[i].inStock = product.inStock;
+      }
+    }
+
+    res.status(204);
     res.send();
   }
 
