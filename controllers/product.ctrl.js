@@ -13,11 +13,13 @@ var productCtrl = {
 
   getById: function (req, res) {
 
-    var id = req.params.id;
+    var id = +req.params.id;
     var product;
 
+    console.log(req.params);
+
     for (var i = 0; i < products.length; i++) {
-      if (products[i].id == id) {
+      if (products[i].id === id) {
         product = products[i];
       }
     }
@@ -43,10 +45,10 @@ var productCtrl = {
   },
 
   delete: function (req, res) {
-    var id = req.params.id;
+    var id = +req.params.id;
 
     for (var i = 0; i < products.length; i++) {
-      if (products[i].id == id) {
+      if (products[i].id === id) {
         products.splice(i, 1);
       }
     }
