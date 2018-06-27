@@ -1,18 +1,14 @@
-var express = require('express');
-var bodyParser = require('body-parser');
+const express = require('express');
+const bodyParser = require('body-parser');
 //ES6 module pattern
 //CommonJS
 
-var app = express();
+const app = express();
 
-var defaultRouter = require('./routes/default.router');
-var productRouter = require('./routes/product.router');
+const defaultRouter = require('./routes/default.router');
+const productRouter = require('./routes/product.router');
 
-function cb() {
-  console.log("Server is running on port 3000");
-}
-
-app.listen(3000, cb);
+app.listen(3000, () => console.log("Server is running on port 3000"));
 
 app.use(bodyParser.json());
 
