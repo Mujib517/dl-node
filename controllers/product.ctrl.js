@@ -1,14 +1,25 @@
-const products = [{ id: 1, brand: "Nokia", model: "X6", price: 250, inStock: true },
-{ id: 2, brand: "Samsung", model: "Galxy S8", price: 250, inStock: true },
-{ id: 3, brand: "Samsung", model: "Galaxy S9", price: 750, inStock: false }];
-
-
+const Product = require('../models/product.model');
 
 const productCtrl = {
 
   get: (req, res) => {
-    res.status(200);
-    res.json(products);
+
+    //asynchronous
+    Product.find(function (err, products) {
+
+      //"",0,false,null,undefined,Nan.
+      if(err){
+        res.status(500); //Internal Server Error
+        //log
+        res.send("Internal Server Error");  //Never send technical error messages
+      }
+      else{
+        res.status(200);
+        res.json(products);
+      }
+
+    
+    });
   },
 
   getById: (req, res) => {
