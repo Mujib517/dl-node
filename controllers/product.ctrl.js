@@ -3,16 +3,12 @@ const Product = require('../models/product.model');
 const productCtrl = {
 
   get: (req, res) => {
-    
-    let pageIndex = 0;
 
-    if (req.params.pageIndex) {
-      pageIndex = +req.params.pageIndex;
-    }
-    let pageSize = 10;
-    if (req.params.pageSize) {
-      pageSize = +req.params.pageSize;
-    }
+    // let pageIndex = req.params.pageIndex ? +req.params.pageIndex : 0;
+    // let pageSize = req.params.pageSize ? +req.params.pageSize : 10;
+    
+    let pageIndex = +req.params.pageIndex || 0;
+    let pageSize = +req.params.pageSize || 10;
 
     Product.count()
       .exec()
