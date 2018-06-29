@@ -8,62 +8,69 @@ const productCtrl = {
     Product.find(function (err, products) {
 
       //"",0,false,null,undefined,Nan.
-      if(err){
+      if (err) {
         res.status(500); //Internal Server Error
         //log
         res.send("Internal Server Error");  //Never send technical error messages
       }
-      else{
+      else {
         res.status(200);
         res.json(products);
       }
 
-    
+
     });
   },
 
   getById: (req, res) => {
 
-    let id = +req.params.id;
-    let product;
+    let id = req.params.id;
 
-    for (let i = 0; i < products.length; i++) {
-      if (products[i].id === id) {
-        product = products[i];
+    Product.findById(id, function (err, product) {
+      if (product) {
+        res.status(200);
+        res.json(product);
       }
-    }
-
-    if (product) {
-      res.status(200);
-      res.json(product);
-    }
-    else {
-      res.status(404); //Not found
-      res.send("Not Found");
-    }
-
-
+      else {
+        res.status(404); //Not found
+        res.send("Not Found");
+      }
+    });
   },
 
   save: (req, res) => {
 
-    products.push(req.body);
+    var product = new Product(req.body);
 
-    res.status(201); //Created
-    res.send(req.body);
+    product.save(function (err, savedProduct) {
+      if (err) {
+        res.status(500);
+        res.send("Internal server error");
+      }
+      else {
+        res.status(201); //Created
+        res.json(savedProduct);
+      }
+    });
+
+
   },
 
   delete: (req, res) => {
-    let id = +req.params.id;
+    let id = req.params.id;
 
-    for (let i = 0; i < products.length; i++) {
-      if (products[i].id === id) {
-        products.splice(i, 1);
+    Product.findByIdAndRemove(id, function (err) {
+      if (err) {
+        res.status(500);
+        res.send(err);
       }
-    }
+      else {
+        res.status(204);  //No Content
+        res.send();
+      }
+    })
 
-    res.status(204);  //No Content
-    res.send();
+
   },
 
   update: (req, res) => {
