@@ -5,15 +5,18 @@ const productCtrl = {
   get: (req, res) => {
 
     //asynchronous
-    Product.find()
+    Product
+      .find()
       .exec()
       .then(function (products) {
-        res.status(200);
-        res.json(products);
+        res.status(200)
+          .json(products);
       })
       .catch(function (err) {
-        res.status(500);
-        res.send("Internal Server Error");
+
+        res
+          .status(500)
+          .send("Internal Server Error");
       })
   },
 
@@ -24,12 +27,12 @@ const productCtrl = {
     Product.findById(id)
       .exec()
       .then(function (product) {
-        res.status(200);
-        res.json(product);
+        res.status(200)
+          .json(product);
       })
       .catch(function (err) {
-        res.status(404); //Not found
-        res.send("Not Found");
+        res.status(404)
+          .send("Not Found");
       });
   },
 
@@ -53,15 +56,15 @@ const productCtrl = {
     let id = req.params.id;
 
     Product.findByIdAndRemove(id)
-    .exec()
-    .then(function(){
-      res.status(204);  //No Content
-      res.send();
-    })
-    .catch(function(err){
-      res.status(500);
-      res.send(err);
-    });
+      .exec()
+      .then(function () {
+        res.status(204);  //No Content
+        res.send();
+      })
+      .catch(function (err) {
+        res.status(500);
+        res.send(err);
+      });
   },
 
   update: (req, res) => {
