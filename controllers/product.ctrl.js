@@ -5,72 +5,63 @@ const productCtrl = {
   get: (req, res) => {
 
     //asynchronous
-    Product.find(function (err, products) {
-
-      //"",0,false,null,undefined,Nan.
-      if (err) {
-        res.status(500); //Internal Server Error
-        //log
-        res.send("Internal Server Error");  //Never send technical error messages
-      }
-      else {
+    Product.find()
+      .exec()
+      .then(function (products) {
         res.status(200);
         res.json(products);
-      }
-
-
-    });
+      })
+      .catch(function (err) {
+        res.status(500);
+        res.send("Internal Server Error");
+      })
   },
 
   getById: (req, res) => {
 
     let id = req.params.id;
 
-    Product.findById(id, function (err, product) {
-      if (product) {
+    Product.findById(id)
+      .exec()
+      .then(function (product) {
         res.status(200);
         res.json(product);
-      }
-      else {
+      })
+      .catch(function (err) {
         res.status(404); //Not found
         res.send("Not Found");
-      }
-    });
+      });
   },
 
   save: (req, res) => {
 
     var product = new Product(req.body);
 
-    product.save(function (err, savedProduct) {
-      if (err) {
-        res.status(500);
-        res.send("Internal server error");
-      }
-      else {
+    product
+      .save()
+      .then(function (savedProduct) {
         res.status(201); //Created
         res.json(savedProduct);
-      }
-    });
-
-
+      })
+      .catch(function (err) {
+        res.status(500);
+        res.send(err);
+      })
   },
 
   delete: (req, res) => {
     let id = req.params.id;
 
-    Product.findByIdAndRemove(id, function (err) {
-      if (err) {
-        res.status(500);
-        res.send(err);
-      }
-      else {
-        res.status(204);  //No Content
-        res.send();
-      }
+    Product.findByIdAndRemove(id)
+    .exec()
+    .then(function(){
+      res.status(204);  //No Content
+      res.send();
     })
-
-
+    .catch(function(err){
+      res.status(500);
+      res.send(err);
+    });
   },
 
   update: (req, res) => {
