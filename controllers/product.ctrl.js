@@ -3,21 +3,50 @@ const Product = require('../models/product.model');
 const productCtrl = {
 
   get: (req, res) => {
+    
+    let pageIndex = 0;
 
-    //asynchronous
-    Product
-      .find()
+    if (req.params.pageIndex) {
+      pageIndex = +req.params.pageIndex;
+    }
+    let pageSize = 10;
+    if (req.params.pageSize) {
+      pageSize = +req.params.pageSize;
+    }
+
+    Product.count()
       .exec()
-      .then(function (products) {
-        res.status(200)
-          .json(products);
-      })
-      .catch(function (err) {
+      .then(cnt => {
+        let totalPages = Math.ceil(cnt / pageSize);
 
-        res
-          .status(500)
-          .send("Internal Server Error");
-      })
+        let metadata = {
+          count: cnt,
+          totalPages: totalPages,
+          hasPrevious: pageIndex > 0,
+          hasNext: pageIndex < totalPages - 1
+        };
+        Product
+          .find()
+          .skip(pageIndex * pageSize)
+          .limit(pageSize)
+          .exec()
+          .then(function (products) {
+
+            var response = {
+              metadata: metadata,
+              data: products
+            };
+
+            res.status(200);
+            res.json(response);
+
+          })
+          .catch(function (err) {
+            res
+              .status(500)
+              .send("Internal Server Error");
+          })
+      });
   },
 
   getById: (req, res) => {
