@@ -74,22 +74,54 @@ const productCtrl = {
   },
 
   update: (req, res) => {
-    let product = req.body;
-    let id = +req.params.id;
+    let id = req.params.id;
 
-    for (let i = 0; i < products.length; i++) {
-      if (products[i].id === id) {
-        products[i].brand = product.brand;
-        products[i].model = product.model;
-        products[i].price = product.price;
-        products[i].inStock = product.inStock;
+    //Deferred Execution
+    Product.findByIdAndUpdate(id, {
+      $set: {
+        brand: req.body.brand,
+        model: req.body.model,
+        price: req.body.price,
+        inStock: req.body.inStock
       }
-    }
+    }, function (err) {
+      if (!err) {
+        res.status(204);
+        res.send();
+      }
+      else {
+        res.status(500);
+        res.send("Internal Server Error");
+      }
+    })
 
-    res.status(204);
-    res.send();
+
+
+  },
+
+  patch: (req, res) => {
+
+    let id = req.params.id;
+    delete req.body._id;
+
+    Product.findById(id, function (err, product) {
+
+      if (product) {
+        for (var key in req.body) {
+          product[key] = req.body[key];
+        }
+
+        Product.findByIdAndUpdate(id, product, function (err) {
+          res.status(204);
+          res.send();
+        });
+      }
+      else {
+        res.status(404);
+        res.send("Not Found");
+      }
+    });
   }
-
 };
 
 
