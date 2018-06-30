@@ -6,7 +6,7 @@ const productCtrl = {
 
     // let pageIndex = req.params.pageIndex ? +req.params.pageIndex : 0;
     // let pageSize = req.params.pageSize ? +req.params.pageSize : 10;
-    
+
     let pageIndex = +req.params.pageIndex || 0;
     let pageSize = +req.params.pageSize || 10;
 
@@ -52,12 +52,12 @@ const productCtrl = {
     Product.findById(id)
       .exec()
       .then(function (product) {
-        res.status(200)
-          .json(product);
+        if (product) res.status(200).json(product);
+        else res.status(404).send("Not Found");
       })
       .catch(function (err) {
-        res.status(404)
-          .send("Not Found");
+        res.status(500)
+          .send("Internal Server Error");
       });
   },
 
