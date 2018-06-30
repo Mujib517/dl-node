@@ -1,11 +1,9 @@
 const Product = require('../models/product.model');
+const productSvc = require('../services/product.svc');
 
 const productCtrl = {
 
   get: (req, res) => {
-
-    // let pageIndex = req.params.pageIndex ? +req.params.pageIndex : 0;
-    // let pageSize = req.params.pageSize ? +req.params.pageSize : 10;
 
     let pageIndex = +req.params.pageIndex || 0;
     let pageSize = +req.params.pageSize || 10;
@@ -45,77 +43,41 @@ const productCtrl = {
       });
   },
 
-  getById: (req, res) => {
-
-    let id = req.params.id;
-
-    Product.findById(id)
-      .exec()
-      .then(function (product) {
-        if (product) res.status(200).json(product);
-        else res.status(404).send("Not Found");
-      })
-      .catch(function (err) {
-        res.status(500)
-          .send("Internal Server Error");
-      });
+  getById: async (req, res) => {
+    try {
+      let id = req.params.id;
+      let product = await productSvc.getProduct(id);
+      res.status(200).json(product);
+    }
+    catch (err) {
+      res.status(500).send(err);
+    }
   },
 
-  save: (req, res) => {
-
-    var product = new Product(req.body);
-
-    product
-      .save()
-      .then(function (savedProduct) {
-        res.status(201); //Created
-        res.json(savedProduct);
-      })
-      .catch(function (err) {
-        res.status(500);
-        res.send(err);
-      })
+  save: async (req, res) => {
+    try {
+      let savedProduct = await productSvc.save(req.body);
+      res.status(201);
+      res.json(savedProduct);
+    }
+    catch (err) {
+      res.status(500).send("Internal Server Error");
+    }
   },
 
-  delete: (req, res) => {
+  delete: async (req, res) => {
     let id = req.params.id;
-
-    Product.findByIdAndRemove(id)
-      .exec()
-      .then(function () {
-        res.status(204);  //No Content
-        res.send();
-      })
-      .catch(function (err) {
-        res.status(500);
-        res.send(err);
-      });
+    await productSvc.delete(id);
+    res.status(204);
+    res.send();
   },
 
   update: (req, res) => {
     let id = req.params.id;
 
-    //Deferred Execution
-    Product.findByIdAndUpdate(id, {
-      $set: {
-        brand: req.body.brand,
-        model: req.body.model,
-        price: req.body.price,
-        inStock: req.body.inStock
-      }
-    }, function (err) {
-      if (!err) {
-        res.status(204);
-        res.send();
-      }
-      else {
-        res.status(500);
-        res.send("Internal Server Error");
-      }
-    })
-
-
-
+    productSvc.update(id, req.body);
+    res.status(204);
+    res.send();
   },
 
   patch: (req, res) => {
