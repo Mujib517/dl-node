@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 module.exports = mongoose.model("Product", {
-  brand: String,
-  model: String,
-  price: Number,
-  inStock: Boolean,
+  brand: { type: String, required: true },
+  model: { type: String, required: true },
+  price: { type: Number },
+  inStock: { type: Boolean, default: false },
   lastUpdated: { type: Date, default: Date.now }
 });
