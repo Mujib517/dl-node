@@ -1,6 +1,14 @@
 const Product = require('../models/product.model');
 
 class ProductService {
+  
+  get(pageIndex,pageSize){
+     return Product.find()
+     .skip(pageIndex*pageSize)
+     .limit(pageSize)
+     .exec();
+  }
+
   //ES7
   getProduct(id) {
     return Product.findById(id)
@@ -27,6 +35,22 @@ class ProductService {
         inStock: data.inStock
       }
     }).exec();
+  }
+
+  patch(id, data) {
+    Product.findById(id, function (err, product) {
+      if (product) {
+        for (var key in data) {
+          product[key] = data[key];
+        }
+        return Product.findByIdAndUpdate(id, product).exec();
+      }
+    });
+  }
+
+  getCount() {
+    return Product.count()
+                  .exec();
   }
 }
 

@@ -1,46 +1,33 @@
-const Product = require('../models/product.model');
 const productSvc = require('../services/product.svc');
 
 const productCtrl = {
 
-  get: (req, res) => {
+  get: async (req, res) => {
 
     let pageIndex = +req.params.pageIndex || 0;
     let pageSize = +req.params.pageSize || 10;
 
-    Product.count()
-      .exec()
-      .then(cnt => {
-        let totalPages = Math.ceil(cnt / pageSize);
+    let cnt = await productSvc.getCount();
+    let products = await productSvc.get(pageIndex, pageSize);
 
-        let metadata = {
-          count: cnt,
-          totalPages: totalPages,
-          hasPrevious: pageIndex > 0,
-          hasNext: pageIndex < totalPages - 1
-        };
-        Product
-          .find()
-          .skip(pageIndex * pageSize)
-          .limit(pageSize)
-          .exec()
-          .then(function (products) {
+    let totalPages = Math.ceil(cnt / pageSize);
 
-            var response = {
-              metadata: metadata,
-              data: products
-            };
+    let metadata = {
+      count: cnt,
+      totalPages: totalPages,
+      hasPrevious: pageIndex > 0,
+      hasNext: pageIndex < totalPages - 1
+    };
 
-            res.status(200);
-            res.json(response);
 
-          })
-          .catch(function (err) {
-            res
-              .status(500)
-              .send("Internal Server Error");
-          })
-      });
+
+    let response = {
+      metadata: metadata,
+      data: products
+    };
+
+    res.status(200);
+    res.json(response);
   },
 
   getById: async (req, res) => {
@@ -80,28 +67,13 @@ const productCtrl = {
     res.send();
   },
 
-  patch: (req, res) => {
+  patch: async (req, res) => {
 
     let id = req.params.id;
     delete req.body._id;
 
-    Product.findById(id, function (err, product) {
-
-      if (product) {
-        for (var key in req.body) {
-          product[key] = req.body[key];
-        }
-
-        Product.findByIdAndUpdate(id, product, function (err) {
-          res.status(204);
-          res.send();
-        });
-      }
-      else {
-        res.status(404);
-        res.send("Not Found");
-      }
-    });
+    await productSvc.patch(id, req.body);
+    res.status(204).send();
   }
 };
 
