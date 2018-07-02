@@ -7,8 +7,11 @@ const productCtrl = {
     let pageIndex = +req.params.pageIndex || 0;
     let pageSize = +req.params.pageSize || 10;
 
+    let sort = req.query.sort || 'lastUpdated';
+    let direction = req.query.direction;
+
     let cnt = await productSvc.getCount();
-    let products = await productSvc.get(pageIndex, pageSize);
+    let products = await productSvc.get(pageIndex, pageSize, sort, direction);
 
     let totalPages = Math.ceil(cnt / pageSize);
 

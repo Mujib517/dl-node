@@ -1,12 +1,16 @@
 const Product = require('../models/product.model');
 
 class ProductService {
-  
-  get(pageIndex,pageSize){
-     return Product.find()
-     .skip(pageIndex*pageSize)
-     .limit(pageSize)
-     .exec();
+
+  get(pageIndex, pageSize, sort, direction) {
+
+    direction = direction === 'asc' ? " " : "-";
+
+    return Product.find({}, { __v: 0 })
+      .sort(direction + sort)
+      .skip(pageIndex * pageSize)
+      .limit(pageSize)
+      .exec();
   }
 
   //ES7
@@ -50,7 +54,7 @@ class ProductService {
 
   getCount() {
     return Product.count()
-                  .exec();
+      .exec();
   }
 }
 
