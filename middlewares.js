@@ -1,4 +1,7 @@
-module.exports= {
+const jwt = require('jsonwebtoken');
+const config = require('./config');
+
+module.exports = {
 
   authenticate: function (req, res, next) {
     let base64String = req.headers["authorization"].replace("Basic ", "");
@@ -14,5 +17,18 @@ module.exports= {
       res.status(401);
       res.send("Unauthorized");
     }
+  },
+
+
+  tokenAuth: function (req, res, next) {
+    let token = req.headers["authorization"];
+
+    jwt.verify(token, config.jwtPassword, function (err) {
+      if (err) {
+        res.status(401);
+        res.send("Unauthorized");
+      }
+      else next();
+    });
   }
 };
