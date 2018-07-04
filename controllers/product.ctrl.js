@@ -1,5 +1,5 @@
 const productSvc = require('../services/product.svc');
-const Review = require('../models/review.model');
+const reviewSvc = require('../services/review.svc');
 
 const productCtrl = {
 
@@ -38,16 +38,13 @@ const productCtrl = {
     try {
       let id = req.params.id;
       let product = await productSvc.getProduct(id);
+      let reviews = await reviewSvc.get(id);
 
-      Review.find({ productId: id }, {_id:0,__v:0})
-        .exec()
-        .then(function (reviews) {
-          //immutable
-          let jsonProduct = product.toJSON();
-
-          jsonProduct.reviews = reviews;
-          res.status(200).json(jsonProduct);
-        });
+      let jsonProduct = product.toJSON();
+      jsonProduct.reviews = reviews;
+      
+      res.status(200);
+      res.json(jsonProduct);
     }
     catch (err) {
       res.status(500).send(err);
