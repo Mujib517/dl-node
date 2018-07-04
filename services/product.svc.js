@@ -15,7 +15,7 @@ class ProductService {
 
   //ES7
   getProduct(id) {
-    return Product.findById(id)
+    return Product.findById(id,{__v:0})
       .exec(); //a promise
   }
 

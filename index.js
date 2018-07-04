@@ -11,6 +11,7 @@ const defaultRouter = require('./routes/default.router');
 const productRouter = require('./routes/product.router');
 const middlewares = require("./middlewares");
 const userRouter = require('./routes/user.router');
+const reviewRouter = require('./routes/review.router');
 
 app.listen(3000, () => console.log("Server is running on port 3000"));
 
@@ -26,7 +27,8 @@ app.use('/', defaultRouter);
 app.use('/api/users', userRouter);
 //basic auth
 //app.use(middlewares.authenticate);
-app.use(middlewares.tokenAuth);
+//app.use(middlewares.tokenAuth);
 
 //private
 app.use('/api/products', productRouter);
+app.use('/api/reviews', reviewRouter);

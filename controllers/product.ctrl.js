@@ -1,4 +1,5 @@
 const productSvc = require('../services/product.svc');
+const Review = require('../models/review.model');
 
 const productCtrl = {
 
@@ -37,7 +38,16 @@ const productCtrl = {
     try {
       let id = req.params.id;
       let product = await productSvc.getProduct(id);
-      res.status(200).json(product);
+
+      Review.find({ productId: id }, {_id:0,__v:0})
+        .exec()
+        .then(function (reviews) {
+          //immutable
+          let jsonProduct = product.toJSON();
+
+          jsonProduct.reviews = reviews;
+          res.status(200).json(jsonProduct);
+        });
     }
     catch (err) {
       res.status(500).send(err);
