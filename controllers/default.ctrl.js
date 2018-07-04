@@ -9,7 +9,7 @@ class DefaultCtrl {
 
   get(req, res) {
     res.status(200); //ok
-    res.send("Express API");
+    res.send("Express API Works!");
   }
 
   health(req, res) {
