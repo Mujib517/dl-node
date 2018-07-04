@@ -13,8 +13,9 @@ const middlewares = require("./middlewares");
 const userRouter = require('./routes/user.router');
 const reviewRouter = require('./routes/review.router');
 
-app.listen(3000, () => console.log("Server is running on port 3000"));
+const PORT = process.env.PORT || 3000;
 
+app.listen(PORT, () => console.log("Server is running on port 3000"));
 
 mongoose.connect(config.conStr, () => console.log("DB Connected"));
 
