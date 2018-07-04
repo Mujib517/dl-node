@@ -1,12 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
 //ES6 module pattern
 //CommonJS
 
 const app = express();
 
+const config = require('./config');
 const defaultRouter = require('./routes/default.router');
 const productRouter = require('./routes/product.router');
 const middlewares = require("./middlewares");
@@ -16,7 +16,7 @@ const reviewRouter = require('./routes/review.router');
 app.listen(3000, () => console.log("Server is running on port 3000"));
 
 
-mongoose.connect("mongodb://localhost/dl-products", () => console.log("DB Connected"));
+mongoose.connect(config.conStr, () => console.log("DB Connected"));
 
 app.use(bodyParser.json());
 
