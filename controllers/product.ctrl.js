@@ -46,6 +46,7 @@ const productCtrl = {
 
       let jsonProduct = product.toJSON();
       jsonProduct.reviews = reviews;
+      if (jsonProduct.image) jsonProduct.image = `${req.protocol}://${req.get('host')}/${jsonProduct.image}`;
 
       res.status(200);
       res.json(jsonProduct);
