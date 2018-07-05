@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const trueLog = require('true-log');
 //ES6 module pattern
 //CommonJS
 
@@ -22,6 +23,10 @@ mongoose.connect(config.conStr, () => console.log("DB Connected"));
 app.use(express.static('uploads/'));
 
 app.use(bodyParser.json());
+
+var fs = require('fs');
+var ws = fs.createWriteStream(__dirname + "/request-log.log", { flags: 'a' });
+app.use(trueLog({ level: 'full', stream: ws }));
 
 const multer = require('multer');
 const storage = multer.diskStorage({
