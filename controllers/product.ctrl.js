@@ -14,6 +14,12 @@ const productCtrl = {
     let cnt = await productSvc.getCount();
     let products = await productSvc.get(pageIndex, pageSize, sort, direction);
 
+    for (let i = 0; i < products.length; i++) {
+      let product = products[i];
+      if (product.image) product.image = "http://localhost:3000/" + product.image;
+    }
+
+
     let totalPages = Math.ceil(cnt / pageSize);
 
     let metadata = {
