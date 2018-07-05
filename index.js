@@ -19,6 +19,8 @@ app.listen(PORT, () => console.log("Server is running on port 3000"));
 
 mongoose.connect(config.conStr, () => console.log("DB Connected"));
 
+app.use(express.static('uploads/'));
+
 app.use(bodyParser.json());
 
 const multer = require('multer');
