@@ -16,7 +16,7 @@ const productCtrl = {
 
     for (let i = 0; i < products.length; i++) {
       let product = products[i];
-      if (product.image) product.image = "http://localhost:3000/" + product.image;
+      if (product.image) product.image = `${req.protocol}://${req.get('host')}/${product.image}`;
     }
 
 
