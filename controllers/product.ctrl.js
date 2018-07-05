@@ -23,8 +23,6 @@ const productCtrl = {
       hasNext: pageIndex < totalPages - 1
     };
 
-
-
     let response = {
       metadata: metadata,
       data: products
@@ -42,7 +40,7 @@ const productCtrl = {
 
       let jsonProduct = product.toJSON();
       jsonProduct.reviews = reviews;
-      
+
       res.status(200);
       res.json(jsonProduct);
     }

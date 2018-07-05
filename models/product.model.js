@@ -12,5 +12,6 @@ module.exports = mongoose.model("Product", {
     type: Number, validate: { validator: priceValidator }
   },
   inStock: { type: Boolean, default: false },
+  image: { type: String },
   lastUpdated: { type: Date, default: Date.now }
 });

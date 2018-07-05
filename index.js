@@ -21,10 +21,22 @@ mongoose.connect(config.conStr, () => console.log("DB Connected"));
 
 app.use(bodyParser.json());
 
+const multer = require('multer');
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads');
+  },
+  filename: function (req, file, cb) {
+    let filename = Date.now() + "-" + file.originalname;
+    cb(null, filename);
+  }
+});
+
+const upload = multer({ storage: storage });
+
 app.use('/', defaultRouter);
 
 //middleware
-
 app.use('/api/users', userRouter);
 //basic auth
 //app.use(middlewares.authenticate);
