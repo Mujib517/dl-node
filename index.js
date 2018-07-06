@@ -25,7 +25,7 @@ app.use(express.static('uploads/'));
 app.use(bodyParser.json());
 
 var fs = require('fs');
-var ws = fs.createWriteStream(__dirname + "/request-log.log", { flags: 'a' });
+var ws = fs.createWriteStream(__dirname + "/logs/request-log.log", { flags: 'a' });
 app.use(trueLog({ level: 'full',stream:ws}));
 
 const multer = require('multer');
