@@ -1,9 +1,11 @@
 const bunyan = require("bunyan");
+const path = require("path");
+
 const logger = bunyan.createLogger({
   name: 'dl-products',
   streams: [{
     level: 30,
-    path: 'logs/application.log'
+    path: path.join('logs', 'application.log')
   },
   {
     level: 40,

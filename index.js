@@ -24,9 +24,10 @@ app.use(express.static('uploads/'));
 
 app.use(bodyParser.json());
 
+var path = require('path');
 var fs = require('fs');
-var ws = fs.createWriteStream(__dirname + "/logs/request-log.log", { flags: 'a' });
-app.use(trueLog({ level: 'full',stream:ws}));
+var ws = fs.createWriteStream(path.join(__dirname, "logs", "request-log.log"), { flags: 'a' });
+app.use(trueLog({ level: 'full', stream: ws }));
 
 const multer = require('multer');
 const storage = multer.diskStorage({
