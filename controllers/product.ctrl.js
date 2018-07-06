@@ -1,5 +1,6 @@
 const productSvc = require('../services/product.svc');
 const reviewSvc = require('../services/review.svc');
+const logger = require("../utilities/logger");
 
 const productCtrl = {
 
@@ -19,6 +20,7 @@ const productCtrl = {
       if (product.image) product.image = `${req.protocol}://${req.get('host')}/${product.image}`;
     }
 
+    logger.info({ pageIndex: pageIndex, pageSize: pageSize });
 
     let totalPages = Math.ceil(cnt / pageSize);
 
@@ -64,7 +66,8 @@ const productCtrl = {
       res.json(savedProduct);
     }
     catch (err) {
-      res.status(500).send(err);
+      logger.error(err);
+      res.status(500).send("Internal Server Error");
     }
   },
 
