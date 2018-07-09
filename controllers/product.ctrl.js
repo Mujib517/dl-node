@@ -1,6 +1,7 @@
 const productSvc = require('../services/product.svc');
 const reviewSvc = require('../services/review.svc');
 const logger = require("../utilities/logger");
+const Review = require('../models/review.model');
 
 const productCtrl = {
 
@@ -46,13 +47,27 @@ const productCtrl = {
       let product = await productSvc.getProduct(id);
       let reviews = await reviewSvc.get(id);
 
-      let jsonProduct = product.toJSON();
-      jsonProduct.reviews = reviews;
-      if (jsonProduct.image)
-        jsonProduct.image = `${req.protocol}://${req.get('host')}/${jsonProduct.image}`;
+      Review.aggregate(
+        [
+          { $match: { productId: id } },
+          { $group: { _id: '$productId', avgRating: { $avg: '$rating' } } },
+          { $project: { _id: 0 } }
+        ]
+      )
+        .exec()
+        .then(function (result) {
+          let jsonProduct = product.toJSON();
+          if (result && result.length > 0)
+            jsonProduct.avgRating = result[0].avgRating;
 
-      res.status(200);
-      res.json(jsonProduct);
+          jsonProduct.reviews = reviews;
+
+          if (jsonProduct.image)
+            jsonProduct.image = `${req.protocol}://${req.get('host')}/${jsonProduct.image}`;
+
+          res.status(200);
+          res.json(jsonProduct);
+        });
     }
     catch (err) {
       res.status(500).send(err);
