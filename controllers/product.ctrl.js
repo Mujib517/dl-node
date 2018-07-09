@@ -1,7 +1,6 @@
 const productSvc = require('../services/product.svc');
 const reviewSvc = require('../services/review.svc');
 const logger = require("../utilities/logger");
-const Review = require('../models/review.model');
 
 const productCtrl = {
 
@@ -46,33 +45,25 @@ const productCtrl = {
       let id = req.params.id;
       let product = await productSvc.getProduct(id);
       let reviews = await reviewSvc.get(id);
+     
+      let jsonProduct = product.toJSON();
+     
+      let result = await reviewSvc.getAvgRating(id);
+      if (result && result.length > 0)
+        jsonProduct.avgRating = result[0].avgRating;
 
-      Review.aggregate(
-        [
-          { $match: { productId: id } },
-          { $group: { _id: '$productId', avgRating: { $avg: '$rating' } } },
-          { $project: { _id: 0 } }
-        ]
-      )
-        .exec()
-        .then(function (result) {
-          let jsonProduct = product.toJSON();
-          if (result && result.length > 0)
-            jsonProduct.avgRating = result[0].avgRating;
+      jsonProduct.reviews = reviews;
 
-          jsonProduct.reviews = reviews;
+      if (jsonProduct.image)
+        jsonProduct.image = `${req.protocol}://${req.get('host')}/${jsonProduct.image}`;
 
-          if (jsonProduct.image)
-            jsonProduct.image = `${req.protocol}://${req.get('host')}/${jsonProduct.image}`;
-
-          res.status(200);
-          res.json(jsonProduct);
-        });
-    }
-    catch (err) {
-      res.status(500).send(err);
-    }
-  },
+      res.status(200);
+      res.json(jsonProduct);
+  }
+    catch(err) {
+    res.status(500).send(err);
+  }
+},
 
   save: async (req, res) => {
     try {
@@ -86,29 +77,29 @@ const productCtrl = {
     }
   },
 
-  delete: async (req, res) => {
-    let id = req.params.id;
-    await productSvc.delete(id);
-    res.status(204);
-    res.send();
-  },
+    delete: async (req, res) => {
+      let id = req.params.id;
+      await productSvc.delete(id);
+      res.status(204);
+      res.send();
+    },
 
-  update: (req, res) => {
-    let id = req.params.id;
+      update: (req, res) => {
+        let id = req.params.id;
 
-    productSvc.update(id, req.body);
-    res.status(204);
-    res.send();
-  },
+        productSvc.update(id, req.body);
+        res.status(204);
+        res.send();
+      },
 
-  patch: async (req, res) => {
+        patch: async (req, res) => {
 
-    let id = req.params.id;
-    delete req.body._id;
+          let id = req.params.id;
+          delete req.body._id;
 
-    await productSvc.patch(id, req.body);
-    res.status(204).send();
-  }
+          await productSvc.patch(id, req.body);
+          res.status(204).send();
+        }
 };
 
 
