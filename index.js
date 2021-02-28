@@ -17,6 +17,11 @@ app.listen(PORT, () => console.log("Server is running on port 3000"));
 
 mongoose.connect(config.conStr, () => console.log("DB Connected"));
 
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
 app.use(express.static('uploads/'));
 app.use(requestLogger);
 app.use(bodyParser.json());
