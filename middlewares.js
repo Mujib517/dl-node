@@ -23,6 +23,9 @@ module.exports = {
   tokenAuth: function (req, res, next) {
     let token = req.headers["authorization"];
 
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
     jwt.verify(token, config.jwtPassword, function (err) {
       if (err) {
         res.status(401);
