@@ -18,9 +18,10 @@
   },
   "homepage": "https://github.com/Mujib517/dl-node#readme",
   "dependencies": {
-    "bcrypt": "^2.0.1",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "bunyan": "^1.8.12",
+    "cors": "^2.8.5",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.1.7",
@@ -28,6 +29,6 @@
     "true-log": "^1.1.0"
   },
   "engines": {
-    "node": "8.11.1"
+    "node": "13.9.0"
   }
 }
