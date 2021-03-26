@@ -27,7 +27,7 @@ app.use('/', defaultRouter);
 //middleware
 app.use('/api/users', userRouter);
 
-app.use(middlewares.tokenAuth);
+// app.use(middlewares.tokenAuth);
 
 //private
 app.use('/api/products', productRouter);
